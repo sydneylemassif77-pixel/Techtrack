@@ -632,6 +632,26 @@ transition: all 0.2s;
 .modal-btn:active { transform: scale(0.97); }
 .modal-btn.primary { background: var(–t1); color: #0d0f14; }
 .modal-btn.secondary { background: var(–surface2); color: var(–text); border: 1px solid var(–border); }
+.modal-btn.danger { background: rgba(255,107,107,0.15); color: var(–t3); border: 1px solid rgba(255,107,107,0.3); }
+
+.edit-field { margin-bottom: 14px; }
+.edit-label { font-size: 11px; color: var(–muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.edit-row { display: flex; align-items: center; gap: 12px; }
+.edit-counter-btn {
+width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(–border);
+background: var(–surface2); color: var(–text); font-size: 20px; font-family: ‘Nunito’, sans-serif;
+font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.edit-val { font-family: ‘Nunito’, sans-serif; font-size: 22px; font-weight: 800; min-width: 30px; text-align: center; }
+
+.history-actions { display: flex; gap: 8px; margin-top: 10px; }
+.history-action-btn {
+flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(–border);
+background: var(–surface2); color: var(–muted); font-family: ‘Nunito’, sans-serif;
+font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.history-action-btn.edit { color: var(–t2); border-color: rgba(77,184,255,0.3); }
+.history-action-btn.delete { color: var(–t3); border-color: rgba(255,107,107,0.3); }
 </style>
 
 </head>
@@ -674,8 +694,92 @@ transition: all 0.2s;
   </div>
 </div>
 
-<!-- MODAL IMPORT -->
+<!-- MODAL EDIT -->
 
+<div class="modal-overlay" id="modalEdit">
+  <div class="modal">
+    <div class="modal-title">✏️ Modifier la journée</div>
+    <div class="modal-desc" id="editDateLabel"></div>
+
+```
+<div class="edit-field">
+  <div class="edit-label" style="color:var(--t1)">Maintenance T1</div>
+  <div class="edit-row">
+    <button class="edit-counter-btn" onclick="editChange('t1',-1)">−</button>
+    <div class="edit-val" id="edit-val-t1">0</div>
+    <button class="edit-counter-btn" onclick="editChange('t1',1)">+</button>
+  </div>
+</div>
+<div class="edit-field">
+  <div class="edit-label" style="color:var(--t2)">Maintenance T2</div>
+  <div class="edit-row">
+    <button class="edit-counter-btn" onclick="editChange('t2',-1)">−</button>
+    <div class="edit-val" id="edit-val-t2">0</div>
+    <button class="edit-counter-btn" onclick="editChange('t2',1)">+</button>
+  </div>
+</div>
+<div class="edit-field">
+  <div class="edit-label" style="color:var(--t3)">Maintenance T3</div>
+  <div class="edit-row">
+    <button class="edit-counter-btn" onclick="editChange('t3',-1)">−</button>
+    <div class="edit-val" id="edit-val-t3">0</div>
+    <button class="edit-counter-btn" onclick="editChange('t3',1)">+</button>
+  </div>
+</div>
+<div class="edit-field">
+  <div class="edit-label" style="color:var(--muted)">Non réalisées</div>
+  <div class="edit-row">
+    <button class="edit-counter-btn" onclick="editChange('tnr',-1)">−</button>
+    <div class="edit-val" id="edit-val-tnr">0</div>
+    <button class="edit-counter-btn" onclick="editChange('tnr',1)">+</button>
+  </div>
+</div>
+<div class="edit-field">
+  <div class="edit-label" style="color:var(--up-fast4)">Fast4</div>
+  <div class="edit-row">
+    <button class="edit-counter-btn" onclick="editChange('fast4',-1)">−</button>
+    <div class="edit-val" id="edit-val-fast4">0</div>
+    <button class="edit-counter-btn" onclick="editChange('fast4',1)">+</button>
+  </div>
+</div>
+<div class="edit-field">
+  <div class="edit-label" style="color:var(--up-contact)">Contact</div>
+  <div class="edit-row">
+    <button class="edit-counter-btn" onclick="editChange('contact',-1)">−</button>
+    <div class="edit-val" id="edit-val-contact">0</div>
+    <button class="edit-counter-btn" onclick="editChange('contact',1)">+</button>
+  </div>
+</div>
+<div class="edit-field">
+  <div class="edit-label" style="color:var(--up-autres)">Autres</div>
+  <div class="edit-row">
+    <button class="edit-counter-btn" onclick="editChange('autres',-1)">−</button>
+    <div class="edit-val" id="edit-val-autres">0</div>
+    <button class="edit-counter-btn" onclick="editChange('autres',1)">+</button>
+  </div>
+</div>
+
+<div class="modal-btns" style="margin-top:16px;">
+  <button class="modal-btn primary" onclick="saveEdit()">Enregistrer</button>
+  <button class="modal-btn secondary" onclick="closeModals()">Annuler</button>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+
+<div class="modal-overlay" id="modalDelete">
+  <div class="modal">
+    <div class="modal-title">🗑️ Supprimer la journée</div>
+    <div class="modal-desc" id="deleteDateLabel"></div>
+    <div class="modal-btns">
+      <button class="modal-btn danger" onclick="confirmDelete()">Supprimer</button>
+      <button class="modal-btn secondary" onclick="closeModals()">Annuler</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modalImport">
   <div class="modal">
     <div class="modal-title">📥 Importer mes données</div>
@@ -702,7 +806,7 @@ transition: all 0.2s;
   <div class="maintenance-cards">
     <div class="maint-card t1">
       <div class="maint-info">
-        <div class="maint-name">T1</div>
+        <div class="maint-name">Maintenance T1</div>
         <div class="maint-price">35 € / unité</div>
         <div class="maint-subtotal" id="sub-t1">0 €</div>
       </div>
@@ -716,7 +820,7 @@ transition: all 0.2s;
 ```
 <div class="maint-card t2">
   <div class="maint-info">
-    <div class="maint-name">T2</div>
+    <div class="maint-name">Maintenance T2</div>
     <div class="maint-price">50 € / unité</div>
     <div class="maint-subtotal" id="sub-t2">0 €</div>
   </div>
@@ -729,7 +833,7 @@ transition: all 0.2s;
 
 <div class="maint-card t3">
   <div class="maint-info">
-    <div class="maint-name">T3</div>
+    <div class="maint-name">Maintenance T3</div>
     <div class="maint-price">85 € / unité</div>
     <div class="maint-subtotal" id="sub-t3">0 €</div>
   </div>
@@ -737,6 +841,19 @@ transition: all 0.2s;
     <button class="counter-btn" onclick="change('t3',-1)">−</button>
     <div class="counter-val" id="val-t3">0</div>
     <button class="counter-btn plus" onclick="change('t3',1)">+</button>
+  </div>
+</div>
+
+<div class="maint-card" style="border-color: rgba(107,114,128,0.4);">
+  <div class="maint-info">
+    <div class="maint-name" style="color:var(--muted)">Maintenance non réalisée</div>
+    <div class="maint-price">0 € / unité</div>
+    <div class="maint-subtotal" style="color:var(--muted)" id="sub-tnr">0</div>
+  </div>
+  <div class="counter">
+    <button class="counter-btn" onclick="change('tnr',-1)">−</button>
+    <div class="counter-val" id="val-tnr">0</div>
+    <button class="counter-btn plus" onclick="change('tnr',1)">+</button>
   </div>
 </div>
 ```
@@ -855,6 +972,18 @@ transition: all 0.2s;
       <div class="stat-card-label">Nb total upsells</div>
       <div class="stat-card-val" style="color:var(--upsell)" id="statUpsellCount">0</div>
     </div>
+    <div class="stat-card full" style="border-color: rgba(79,255,176,0.3);">
+      <div class="stat-card-label">📈 KPI — Taux de réalisation</div>
+      <div class="stat-card-val" style="color:var(--t1)" id="statKpi">0%</div>
+    </div>
+    <div class="stat-card full" style="border-color: rgba(245,200,66,0.3);">
+      <div class="stat-card-label">🎯 Taux upsell / maintenance</div>
+      <div class="stat-card-val gold" id="statUpsellRate">0%</div>
+    </div>
+    <div class="stat-card full" style="border-color: rgba(107,114,128,0.4);">
+      <div class="stat-card-label">❌ Maintenances non réalisées</div>
+      <div class="stat-card-val" style="color:var(--muted)" id="statTnr">0</div>
+    </div>
   </div>
 
   <div class="stat-card" style="margin-bottom:20px;">
@@ -873,7 +1002,7 @@ const RATES = { t1: 35, t2: 50, t3: 85 };
 const UPSELL_RATE = 10;
 const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
-let counts = { t1: 0, t2: 0, t3: 0 };
+let counts = { t1: 0, t2: 0, t3: 0, tnr: 0 };
 let upsells = { fast4: 0, contact: 0, autres: 0 };
 let statMonth = new Date();
 statMonth.setDate(1);
@@ -911,6 +1040,8 @@ function updateUI() {
     const sub = counts[t] * RATES[t];
     document.getElementById('sub-'+t).textContent = sub > 0 ? sub + ' €' : '0 €';
   });
+  document.getElementById('val-tnr').textContent = counts.tnr;
+  document.getElementById('sub-tnr').textContent = counts.tnr > 0 ? counts.tnr + ' non réalisée(s)' : '0';
   ['fast4','contact','autres'].forEach(u => {
     document.getElementById('val-'+u).textContent = upsells[u];
     const sub = upsells[u] * UPSELL_RATE;
@@ -928,9 +1059,9 @@ function saveDay() {
   }
   const data = getStorage();
   const key = todayKey();
-  data[key] = { t1: counts.t1, t2: counts.t2, t3: counts.t3, fast4: upsells.fast4, contact: upsells.contact, autres: upsells.autres };
+  data[key] = { t1: counts.t1, t2: counts.t2, t3: counts.t3, tnr: counts.tnr, fast4: upsells.fast4, contact: upsells.contact, autres: upsells.autres };
   saveStorage(data);
-  counts = { t1: 0, t2: 0, t3: 0 };
+  counts = { t1: 0, t2: 0, t3: 0, tnr: 0 };
   upsells = { fast4: 0, contact: 0, autres: 0 };
   updateUI();
   updateHeader();
@@ -976,9 +1107,10 @@ function renderHistory() {
     const [y, m, d] = key.split('-');
     const dateStr = `${d}/${m}/${y}`;
     const pills = [];
-    if (val.t1 > 0) pills.push(`<span class="pill pill-t1">${val.t1} T1</span>`);
-    if (val.t2 > 0) pills.push(`<span class="pill pill-t2">${val.t2} T2</span>`);
-    if (val.t3 > 0) pills.push(`<span class="pill pill-t3">${val.t3} T3</span>`);
+    if (val.t1 > 0) pills.push(`<span class="pill pill-t1">${val.t1} Maint. T1</span>`);
+    if (val.t2 > 0) pills.push(`<span class="pill pill-t2">${val.t2} Maint. T2</span>`);
+    if (val.t3 > 0) pills.push(`<span class="pill pill-t3">${val.t3} Maint. T3</span>`);
+    if (val.tnr > 0) pills.push(`<span class="pill" style="background:rgba(107,114,128,0.15);color:var(--muted)">${val.tnr} Non réalisée</span>`);
     if (val.fast4 > 0) pills.push(`<span class="pill pill-fast4">${val.fast4} Fast4</span>`);
     if (val.contact > 0) pills.push(`<span class="pill pill-contact">${val.contact} Contact</span>`);
     if (val.autres > 0) pills.push(`<span class="pill pill-autres">${val.autres} Autres</span>`);
@@ -989,6 +1121,10 @@ function renderHistory() {
           <div class="history-total">${total} €</div>
         </div>
         <div class="history-pills">${pills.join('')}</div>
+        <div class="history-actions">
+          <button class="history-action-btn edit" data-key="${key}" onclick="openEdit(this.dataset.key)">✏️ Modifier</button>
+          <button class="history-action-btn delete" data-key="${key}" onclick="openDelete(this.dataset.key)">🗑️ Supprimer</button>
+        </div>
       </div>`;
   }).join('');
 }
@@ -998,11 +1134,12 @@ function renderStats() {
   document.getElementById('statMonthLabel').textContent = MONTHS_FR[statMonth.getMonth()] + ' ' + statMonth.getFullYear();
 
   const data = getStorage();
-  let totT1=0, totT2=0, totT3=0, totFast4=0, totContact=0, totAutres=0, days=0;
+  let totT1=0, totT2=0, totT3=0, totTnr=0, totFast4=0, totContact=0, totAutres=0, days=0;
 
   Object.entries(data).forEach(([key, val]) => {
     if (key.startsWith(mk)) {
       totT1 += val.t1; totT2 += val.t2; totT3 += val.t3;
+      totTnr += (val.tnr||0);
       totFast4 += (val.fast4||0); totContact += (val.contact||0); totAutres += (val.autres||0);
       days++;
     }
@@ -1010,6 +1147,11 @@ function renderStats() {
 
   const upsellTotal = (totFast4 + totContact + totAutres) * 10;
   const total = totT1*35 + totT2*50 + totT3*85 + upsellTotal;
+  const totalMaint = totT1 + totT2 + totT3;
+  const totalUpsellCount = totFast4 + totContact + totAutres;
+  const upsellRate = totalMaint > 0 ? Math.round((totalUpsellCount / totalMaint) * 100) : 0;
+  const kpi = (totalMaint + totTnr) > 0 ? Math.round((totalMaint / (totalMaint + totTnr)) * 100) : 0;
+
   document.getElementById('statTotal').textContent = total.toLocaleString('fr-FR') + ' €';
   document.getElementById('statT1').textContent = totT1;
   document.getElementById('statT2').textContent = totT2;
@@ -1019,7 +1161,10 @@ function renderStats() {
   document.getElementById('statFast4').textContent = totFast4;
   document.getElementById('statContact').textContent = totContact;
   document.getElementById('statAutres').textContent = totAutres;
-  document.getElementById('statUpsellCount').textContent = totFast4 + totContact + totAutres;
+  document.getElementById('statUpsellCount').textContent = totalUpsellCount;
+  document.getElementById('statUpsellRate').textContent = upsellRate + '%';
+  document.getElementById('statTnr').textContent = totTnr;
+  document.getElementById('statKpi').textContent = kpi + '%';
 
   // Bar chart maintenances
   const maxCount = Math.max(totT1, totT2, totT3, totFast4, totContact, totAutres, 1);
@@ -1040,22 +1185,33 @@ function renderStats() {
     </div>`).join('');
 
   // Comparaison mois
-  const monthTotals = {};
+  const monthData = {};
   Object.entries(data).forEach(([key, val]) => {
     const mk2 = key.slice(0,7);
-    if (!monthTotals[mk2]) monthTotals[mk2] = 0;
-    monthTotals[mk2] += val.t1*35 + val.t2*50 + val.t3*85;
-    monthTotals[mk2] += ((val.fast4||0) + (val.contact||0) + (val.autres||0)) * 10;
+    if (!monthData[mk2]) monthData[mk2] = { total: 0, maint: 0, tnr: 0, upsells: 0 };
+    monthData[mk2].total += val.t1*35 + val.t2*50 + val.t3*85;
+    monthData[mk2].total += ((val.fast4||0) + (val.contact||0) + (val.autres||0)) * 10;
+    monthData[mk2].maint += val.t1 + val.t2 + val.t3;
+    monthData[mk2].tnr += (val.tnr||0);
+    monthData[mk2].upsells += (val.fast4||0) + (val.contact||0) + (val.autres||0);
   });
 
-  const sorted = Object.entries(monthTotals).sort((a,b)=>b[0].localeCompare(a[0]));
+  const sorted = Object.entries(monthData).sort((a,b)=>b[0].localeCompare(a[0]));
   document.getElementById('monthsCompare').innerHTML = sorted.length === 0
     ? `<div class="empty-state"><div class="emoji">📊</div><p>Pas encore de données.</p></div>`
-    : sorted.map(([mk2, tot]) => {
+    : sorted.map(([mk2, d]) => {
         const [y,m] = mk2.split('-');
-        return `<div class="month-compare-item">
-          <div class="month-compare-name">${MONTHS_FR[parseInt(m)-1]} ${y}</div>
-          <div class="month-compare-val">${tot.toLocaleString('fr-FR')} €</div>
+        const kpiM = (d.maint + d.tnr) > 0 ? Math.round((d.maint / (d.maint + d.tnr)) * 100) : 0;
+        const upRate = d.maint > 0 ? Math.round((d.upsells / d.maint) * 100) : 0;
+        return `<div class="month-compare-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <div class="month-compare-name">${MONTHS_FR[parseInt(m)-1]} ${y}</div>
+            <div class="month-compare-val">${d.total.toLocaleString('fr-FR')} €</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(79,255,176,0.12);color:var(--t1)">KPI ${kpiM}%</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(245,200,66,0.12);color:var(--gold)">Upsell ${upRate}%</span>
+          </div>
         </div>`;
       }).join('');
 }
@@ -1084,7 +1240,59 @@ function init() {
   updateUI();
 }
 
-// ─── EXPORT / IMPORT ─────────────────────────────────────────
+// ─── EDIT / DELETE ───────────────────────────────────────────
+let editKey = null;
+let editVals = {};
+
+function openEdit(key) {
+  editKey = key;
+  const data = getStorage();
+  const val = data[key];
+  editVals = {
+    t1: val.t1||0, t2: val.t2||0, t3: val.t3||0, tnr: val.tnr||0,
+    fast4: val.fast4||0, contact: val.contact||0, autres: val.autres||0
+  };
+  const [y,m,d] = key.split('-');
+  document.getElementById('editDateLabel').textContent = `Journée du ${d}/${m}/${y}`;
+  ['t1','t2','t3','tnr','fast4','contact','autres'].forEach(f => {
+    document.getElementById('edit-val-'+f).textContent = editVals[f];
+  });
+  document.getElementById('modalEdit').classList.add('open');
+}
+
+function editChange(field, delta) {
+  editVals[field] = Math.max(0, (editVals[field]||0) + delta);
+  document.getElementById('edit-val-'+field).textContent = editVals[field];
+}
+
+function saveEdit() {
+  const data = getStorage();
+  data[editKey] = { ...editVals };
+  saveStorage(data);
+  closeModals();
+  renderHistory();
+  updateHeader();
+  showToast('✅ Journée modifiée');
+}
+
+let deleteKey = null;
+
+function openDelete(key) {
+  deleteKey = key;
+  const [y,m,d] = key.split('-');
+  document.getElementById('deleteDateLabel').textContent = `Tu vas supprimer la journée du ${d}/${m}/${y}. Cette action est irréversible.`;
+  document.getElementById('modalDelete').classList.add('open');
+}
+
+function confirmDelete() {
+  const data = getStorage();
+  delete data[deleteKey];
+  saveStorage(data);
+  closeModals();
+  renderHistory();
+  updateHeader();
+  showToast('🗑️ Journée supprimée');
+}
 function openExport() {
   const data = getStorage();
   document.getElementById('exportText').value = JSON.stringify(data);
@@ -1134,9 +1342,11 @@ function closeModals() {
   document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
 }
 
-// Fermer en cliquant en dehors
-document.addEventListener('click', e => {
-  if (e.target.classList.contains('modal-overlay')) closeModals();
+// Fermer en cliquant sur l'overlay (pas sur le modal lui-même)
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModals();
+  });
 });
 
 init();
